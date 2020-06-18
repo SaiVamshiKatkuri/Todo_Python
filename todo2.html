@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- CSS only -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+<link rel="stylesheet" href="styles.css" >
+   
+<link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Piedra&family=Roboto&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $('#todos').on('click','.del',function(event){
+                   
+                   var id=$(this).attr('id');
+                   
+                   console.log(id);
+                   $.get('http://127.0.0.1:3000/deletetodos/'+id)
+                alert('deleted');
+                
+           
+           get_todos();
+                    })
+            var get_todos = function () {
+                $('#todos').html("");
+
+             
+                $.get("http://127.0.0.1:3000/gettodos/", function (data) {
+                    var data_json = JSON.parse(data);
+                    var i;
+                    
+                    for (i = 0; i < data_json.length; i++) {
+                        console.log();
+                        
+                        $('#todos').append("<div class='sub'><h4>"+ data_json[i][1]+ "</h4> <span> <button class='del' id='"+data_json[i][0]+"'><i class='far fa-trash-alt'></i></button> </span></div>");
+                 
+                    }
+                });
+            };
+            get_todos();
+
+            $('#add_todo').click(function () {
+
+                var user_todo = prompt("Please enter a todo");
+                if(user_todo==null){
+                    user_todo = prompt("Please enter a todo");
+                    $.get("http://127.0.0.1:3000/addtodo/" + user_todo, function (data) {
+                
+                get_todos();
+
+            });
+                }
+                else{
+                $.get("http://127.0.0.1:3000/addtodo/" + user_todo, function (data) {
+                
+                    get_todos();
+
+                });
+                }
+            });
+          $('.del').click(function(e){
+              console.log(e.value);
+              
+          })
+          let today = new Date().toLocaleDateString().slice(0, 10);
+         $('#today').html(today);
+         var date = new Date();
+          var time=date.toLocaleTimeString('en-GB');
+        //   setInterval(time,1000);
+          $('#time').html(time);
+        //   setInterval(time,1000);
+        
+        $("#new_todo").click(function(){
+            $.get("http://127.0.0.1:3000/newtodos/",function(data){
+                
+                alert('deleted');
+               
+
+            })
+            $('#todos').html(""); 
+        })
+  
+
+        });
+
+
+    </script>
+
+</head>
+
+<body style="padding:0px;margin:0px;background-image:url('https://wallpaperaccess.com/full/1489369.jpg');font-family: 'Roboto', sans-serif;">
+	<nav id="navbar_color" class="navbar navbar-expand-lg  navbar-light" style="background-image: linear-gradient(-90deg,#f78259,#ffb385);height:70px;">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" style="font-size: 40px;" href="#"><i class="fab fa-angellist"></i>Vk</a>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+           
+          <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item active">
+              <a class="nav-link" style="float: right; font-size: 20px;" href="home.html">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" style="margin-left:1350px;font-size: 20px;"href="#">Contact</a>
+            </li>
+            
+          </ul>
+        
+        </div>
+      </nav>
+    <div id="header">
+       
+           
+      
+     
+       <h1> My Todos </h1>
+
+
+    </div>
+    <div id="date"><h2 style="color: #303960;">Today</h2>
+    <h4  style="color: #303960;" id="today">date</h4>
+    <h5 id="time">time</h5>
+    </div>
+   
+    <div id="todos">
+
+    </div>
+    <br>
+    <div >
+    <button   id="add_todo">Add todo</button><br><br><br>
+    <button   id="new_todo">New Todo</button>
+    </div>
+</body>
+
+
+</html>
